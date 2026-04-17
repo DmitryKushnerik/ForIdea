@@ -4,7 +4,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class ProductsPage extends BasePage {
-    private final By addToCartBtn = By.xpath("//div[text()='Sauce Labs Backpack']/ancestor::div[@class='inventory_item']//button");
+    private static final String ADD_TO_CART_PATTERN = "//div[text()='%s']/ancestor::div[@class='inventory_item']//child::button";
+    private final By addToCartBtn = By.xpath("//div[@class='inventory_item']//child::button");
     private final By cartLink = By.cssSelector("a.shopping_cart_link");
     private final By cartBadge = By.cssSelector("span.shopping_cart_badge");
 
@@ -12,12 +13,26 @@ public class ProductsPage extends BasePage {
         super(driver);
     }
 
-    public void addToCart() {
-        driver.findElement(addToCartBtn).click();
+    public int getGoodsQuantity() {
+        return driver.findElements(addToCartBtn).size();
     }
 
-    public String getAddToCartBtnText() {
-        return driver.findElement(addToCartBtn).getText();
+    public void addToCart(int goodsNumber) {
+        driver.findElements(addToCartBtn).get(goodsNumber).click();
+    }
+
+    public void addToCart(final String goodsName) {
+        By addToCart = By.xpath(ADD_TO_CART_PATTERN.formatted(goodsName));
+        driver.findElement(addToCart).click();
+    }
+
+    public String getAddToCartBtnText(int goodsNumber) {
+        return driver.findElements(addToCartBtn).get(goodsNumber).getText();
+    }
+
+    public String getAddToCartBtnText(String goodsName) {
+        By button = By.xpath(ADD_TO_CART_PATTERN.formatted(goodsName));
+        return driver.findElement(button).getText();
     }
 
     public boolean isCounterExists() {
@@ -32,7 +47,7 @@ public class ProductsPage extends BasePage {
         return driver.findElement(cartBadge).getCssValue("background-color");
     }
 
-    public void goToCartPage() {
+    public void switchToCart() {
         driver.findElement(cartLink).click();
     }
 }
