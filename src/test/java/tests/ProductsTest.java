@@ -14,7 +14,7 @@ public class ProductsTest extends BaseTest {
             "Sauce Labs Fleece Jacket"
     );
 
-    public void removeGoods(int goodsNumber) {
+    public void removeGoodsAndCheck(int goodsNumber) {
         productsPage.addToCart(goodsNumber);
         assertEquals(productsPage.getAddToCartBtnText(goodsNumber), "Remove", "The text on the button does not match what is expected.");
         assertEquals(productsPage.getCounterValue(), "1", "The cart counter value does not match the expected value.");
@@ -23,7 +23,7 @@ public class ProductsTest extends BaseTest {
         assertFalse(productsPage.isCounterExists(), "The cart counter is present.");
     }
 
-    public void removeGoods(String goodsName) {
+    public void removeGoodsAndCheck(String goodsName) {
         productsPage.addToCart(goodsName);
         assertEquals(productsPage.getAddToCartBtnText(goodsName), "Remove", "The text on the button does not match what is expected.");
         assertEquals(productsPage.getCounterValue(), "1", "The cart counter value does not match the expected value.");
@@ -36,12 +36,12 @@ public class ProductsTest extends BaseTest {
     public void openProductsPage() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
-        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
-        assertEquals(productsPage.getGoodsQuantity(), 6, "The quantity of goods is not as expected.");
     }
 
     @Test
     public void checkGoodsAdded() {
+        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
+        assertEquals(productsPage.getGoodsQuantity(), 6, "The quantity of goods is not as expected.");
         productsPage.addToCart(0);
         for (String goods : goodsList) {
             productsPage.addToCart(goods);
@@ -53,7 +53,9 @@ public class ProductsTest extends BaseTest {
 
     @Test
     public void checkGoodsRemoved() {
-        removeGoods(0);
-        removeGoods(goodsList.get(0));
+        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
+        assertEquals(productsPage.getGoodsQuantity(), 6, "The quantity of goods is not as expected.");
+        removeGoodsAndCheck(0);
+        removeGoodsAndCheck(goodsList.get(0));
     }
 }

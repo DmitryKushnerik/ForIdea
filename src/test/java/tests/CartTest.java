@@ -12,11 +12,11 @@ public class CartTest extends BaseTest {
     public void openProductsPage() {
         loginPage.open();
         loginPage.login("standard_user", "secret_sauce");
-        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
     }
 
     @Test
     public void checkGoodsInCart() {
+        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
         productsPage.addToCart(goodsName);
         productsPage.switchToCart();
         assertEquals(cartPage.getTitle(), "Your Cart", "The 'Your Cart' web page is not open");
@@ -27,6 +27,7 @@ public class CartTest extends BaseTest {
 
     @Test
     public void checkRemoveGoodsFromCart() {
+        assertTrue(productsPage.isTitleDisplayed(), "The 'Products' page's title is not displayed");
         productsPage.addToCart(goodsName);
         productsPage.switchToCart();
         assertEquals(cartPage.getTitle(), "Your Cart", "The 'Your Cart' web page is not open");
