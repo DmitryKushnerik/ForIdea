@@ -7,7 +7,7 @@ public class LoginPage extends BasePage {
     private final By userField = By.cssSelector("#user-name");
     private final By passwordField = By.cssSelector("[placeholder=Password]");
     private final By submitButton = By.id("login-button");
-    private final By errorMessage = By.cssSelector("[data-test=error]");
+    private final By errorMessage = By.cssSelector(DATA_TEST_PATTERN.formatted("error"));
 
     public LoginPage(WebDriver driver) {
         super(driver);
@@ -15,6 +15,10 @@ public class LoginPage extends BasePage {
 
     public void open() {
         driver.get(BASE_URL);
+    }
+
+    public void open(final String url) {
+        driver.get(BASE_URL + url);
     }
 
     public void login(String login, String password) {
