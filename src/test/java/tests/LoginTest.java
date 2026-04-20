@@ -19,7 +19,17 @@ public class LoginTest extends BaseTest {
         loginPage.open();
         loginPage.login(user, password);
         assertTrue(loginPage.isErrorMsgDisplayed(), "The error message fails to appear");
-        assertEquals(loginPage.getErrorMsgText(), errorMessage, "The error message text does not match what is expected.");
+        assertEquals(loginPage.getErrorMsgText(), errorMessage,
+                "The error message text does not match what is expected.");
+    }
+
+    @Test
+    public void checkSwitchToCartWithoutLogin() {
+        loginPage.open("cart.html");
+        assertTrue(loginPage.isErrorMsgDisplayed(), "The error message fails to appear");
+        assertEquals(loginPage.getErrorMsgText(), "Epic sadface: You can only access '/cart.html' when you are logged in.",
+                "The error message text does not match what is expected.");
+
     }
 
     @DataProvider(name = "incorrectData")

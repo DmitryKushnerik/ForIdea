@@ -16,20 +16,27 @@ public class ProductsTest extends BaseTest {
 
     public void removeGoodsAndCheck(int goodsNumber) {
         productsPage.addToCart(goodsNumber);
-        assertEquals(productsPage.getAddToCartBtnText(goodsNumber), "Remove", "The text on the button does not match what is expected.");
-        assertEquals(productsPage.getCounterValue(), "1", "The cart counter value does not match the expected value.");
+        assertEquals(productsPage.getAddToCartBtnText(goodsNumber), "Remove",
+                "The text on the button does not match what is expected.");
+        assertEquals(productsPage.navigationPanel.getCounterValue(), "1",
+                "The cart counter value does not match the expected value.");
         productsPage.addToCart(goodsNumber);
-        assertEquals(productsPage.getAddToCartBtnText(goodsNumber), "Add to cart", "The text on the button does not match what is expected.");
-        assertFalse(productsPage.isCounterExists(), "The cart counter is present.");
+        assertEquals(productsPage.getAddToCartBtnText(goodsNumber), "Add to cart",
+                "The text on the button does not match what is expected.");
+        assertFalse(productsPage.navigationPanel.isCounterExists(),
+                "The cart counter is present.");
     }
 
     public void removeGoodsAndCheck(String goodsName) {
         productsPage.addToCart(goodsName);
-        assertEquals(productsPage.getAddToCartBtnText(goodsName), "Remove", "The text on the button does not match what is expected.");
-        assertEquals(productsPage.getCounterValue(), "1", "The cart counter value does not match the expected value.");
+        assertEquals(productsPage.getAddToCartBtnText(goodsName), "Remove",
+                "The text on the button does not match what is expected.");
+        assertEquals(productsPage.navigationPanel.getCounterValue(), "1",
+                "The cart counter value does not match the expected value.");
         productsPage.addToCart(goodsName);
-        assertEquals(productsPage.getAddToCartBtnText(goodsName), "Add to cart", "The text on the button does not match what is expected.");
-        assertFalse(productsPage.isCounterExists(), "The cart counter is present.");
+        assertEquals(productsPage.getAddToCartBtnText(goodsName), "Add to cart",
+                "The text on the button does not match what is expected.");
+        assertFalse(productsPage.navigationPanel.isCounterExists(), "The cart counter is present.");
     }
 
     @BeforeMethod
@@ -46,9 +53,11 @@ public class ProductsTest extends BaseTest {
         for (String goods : goodsList) {
             productsPage.addToCart(goods);
         }
-        assertTrue(productsPage.isCounterExists(), "The cart counter does not exist");
-        assertEquals(productsPage.getCounterValue(), "4", "The cart counter value does not match the expected value.");
-        assertEquals(productsPage.getCounterColor(), "rgba(226, 35, 26, 1)", "The BG color of cart counter does not match what is expected.");
+        assertTrue(productsPage.navigationPanel.isCounterExists(), "The cart counter does not exist");
+        assertEquals(productsPage.navigationPanel.getCounterValue(), "4",
+                "The cart counter value does not match the expected value.");
+        assertEquals(productsPage.navigationPanel.getCounterColor(), productsPage.navigationPanel.getExpectedCounterColor(),
+                "The BG color of cart counter does not match what is expected.");
     }
 
     @Test
