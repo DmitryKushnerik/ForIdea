@@ -24,7 +24,7 @@ public class BaseTest {
         options.addArguments("headless");
         options.addArguments("guest");
         driver = new ChromeDriver(options);
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
