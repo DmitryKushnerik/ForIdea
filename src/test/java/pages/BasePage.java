@@ -3,11 +3,12 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.PropertyReader;
 
 import java.time.Duration;
 
 public class BasePage {
-    public static final String BASE_URL = "https://www.saucedemo.com/";
+    public static final String BASE_URL = PropertyReader.getProperty("foridea.url");
     public static final String DATA_TEST_PATTERN = "[data-test=%s]";
     private final By pageTitle = By.cssSelector(DATA_TEST_PATTERN.formatted("title"));
     public NavigationPanel navigationPanel;

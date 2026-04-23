@@ -2,6 +2,7 @@ package tests;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import user.UserFactory;
 
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ProductsTest extends BaseTest {
     @BeforeMethod
     public void openProductsPage() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(UserFactory.withAdminPermission());
     }
 
     @Test

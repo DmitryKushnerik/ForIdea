@@ -2,6 +2,8 @@ package tests;
 
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import user.User;
+import user.UserFactory;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
@@ -10,14 +12,14 @@ public class LoginTest extends BaseTest {
     @Test
     public void checkLogin() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(UserFactory.withAdminPermission());
         assertEquals(productsPage.getTitle(), "Products", "The 'Products' web page is not open");
     }
 
     @Test(dataProvider = "incorrectData")
-    public void checkIncorrectLogin(String user, String password, String errorMessage) {
+    public void checkIncorrectLogin(User user, String errorMessage) {
         loginPage.open();
-        loginPage.login(user, password);
+        loginPage.login(user);
         assertTrue(loginPage.isErrorMsgDisplayed(), "The error message fails to appear");
         assertEquals(loginPage.getErrorMsgText(), errorMessage,
                 "The error message text does not match what is expected.");
@@ -35,10 +37,10 @@ public class LoginTest extends BaseTest {
     @DataProvider(name = "incorrectData")
     public Object[][] loginData() {
         return new Object[][]{
-                {"locked_out_user", "secret_sauce", "Epic sadface: Sorry, this user has been locked out."},
-                {"", "secret_sauce", "Epic sadface: Username is required"},
-                {"standard_user", "", "Epic sadface: Password is required"},
-                {"Standard_user", "secret_sauce", "Epic sadface: Username and password do not match any user in this service"}
+                {UserFactory.withLockedPermission(), "Epic sadface: Sorry, this user has been locked out."},
+                {UserFactory.withEmptyLoginPermission(), "Epic sadface: Username is required"},
+                {UserFactory.withEmptyPasswordPermission(), "Epic sadface: Password is required"},
+                {UserFactory.withIncorrectLoginPermission(), "Epic sadface: Username and password do not match any user in this service"}
         };
     }
 }

@@ -2,6 +2,7 @@ package tests;
 
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import user.UserFactory;
 
 import static org.testng.Assert.*;
 
@@ -11,7 +12,7 @@ public class CartTest extends BaseTest {
     @BeforeMethod
     public void openProductsPage() {
         loginPage.open();
-        loginPage.login("standard_user", "secret_sauce");
+        loginPage.login(UserFactory.withAdminPermission());
     }
 
     @Test
