@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class CheckoutThreePage extends BasePage {
-    private String page_url = "checkout-complete.html";
     private By completeImage = By.cssSelector("img.pony_express");
     private By completeHeader = By.cssSelector("h2.complete-header");
     private By completeText = By.cssSelector("div.complete-text");
@@ -13,6 +12,7 @@ public class CheckoutThreePage extends BasePage {
 
     public CheckoutThreePage(WebDriver driver) {
         super(driver);
+        this.page_url = "checkout-complete.html";
     }
 
     @Step("Проверить, отображается ли изображение")
@@ -38,10 +38,5 @@ public class CheckoutThreePage extends BasePage {
     @Step("Кликнуть по кнопке Home Button")
     public void clickOnBackHomeButton() {
         driver.findElement(backHomeButton).click();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 }

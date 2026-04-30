@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class CheckoutOnePage extends BasePage {
-    private String page_url = "checkout-step-one.html";
     private By cancelButton = By.id("cancel");
     private By continueButton = By.id("continue");
     private By firstNameField = By.id("first-name");
@@ -15,6 +14,7 @@ public class CheckoutOnePage extends BasePage {
 
     public CheckoutOnePage(WebDriver driver) {
         super(driver);
+        this.page_url = "checkout-step-one.html";
     }
 
     @Step("Кликнуть по кнопке Cancel")
@@ -42,10 +42,5 @@ public class CheckoutOnePage extends BasePage {
     @Step("Получить текст сообщения об ошибке")
     public String getErrorMessageText() {
         return driver.findElement(errorMessage).getText();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 }

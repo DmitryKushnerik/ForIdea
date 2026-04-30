@@ -6,11 +6,11 @@ import org.openqa.selenium.WebDriver;
 
 public class ProductsPage extends BasePage {
     private static final String ADD_TO_CART_PATTERN = "//div[text()='%s']/ancestor::div[@class='inventory_item']//child::button";
-    private String page_url = "inventory.html";
     private By addToCartBtn = By.xpath("//div[@class='inventory_item']//child::button");
 
     public ProductsPage(WebDriver driver) {
         super(driver);
+        this.page_url = "inventory.html";
     }
 
     @Step("Получить количество товаров на странице")
@@ -38,10 +38,5 @@ public class ProductsPage extends BasePage {
     public String getAddToCartBtnText(String goodsName) {
         By button = By.xpath(ADD_TO_CART_PATTERN.formatted(goodsName));
         return driver.findElement(button).getText();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 }

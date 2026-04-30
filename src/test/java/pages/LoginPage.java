@@ -6,7 +6,6 @@ import org.openqa.selenium.WebDriver;
 import user.User;
 
 public class LoginPage extends BasePage {
-    private String page_url = "";
     private By userField = By.cssSelector("#user-name");
     private By passwordField = By.cssSelector("[placeholder=Password]");
     private By submitButton = By.id("login-button");
@@ -14,6 +13,7 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver driver) {
         super(driver);
+        this.page_url = "";
     }
 
     @Step("Открыть главную страницу")
@@ -41,10 +41,5 @@ public class LoginPage extends BasePage {
     @Step("Получить текст сообщения об ошибке")
     public String getErrorMsgText() {
         return driver.findElement(errorMessage).getText();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 }

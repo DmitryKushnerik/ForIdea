@@ -8,7 +8,6 @@ import org.openqa.selenium.WebElement;
 import java.util.List;
 
 public class CheckoutTwoPage extends BasePage {
-    private String page_url = "checkout-step-two.html";
     private By cancelButton = By.id("cancel");
     private By finishButton = By.id("finish");
     private By itemPrice = By.className("inventory_item_price");
@@ -16,9 +15,9 @@ public class CheckoutTwoPage extends BasePage {
     private By taxLabel = By.className("summary_tax_label");
     private By totalLabel = By.className("summary_total_label");
 
-
     public CheckoutTwoPage(WebDriver driver) {
         super(driver);
+        this.page_url = "checkout-step-two.html";
     }
 
     @Step("Кликнуть по кнопке Cancel")
@@ -29,11 +28,6 @@ public class CheckoutTwoPage extends BasePage {
     @Step("Кликнуть по кнопке Finish")
     public void clickOnFinishButton() {
         driver.findElement(finishButton).click();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 
     @Step("Рассчитать общую стоимость товаров на странице")

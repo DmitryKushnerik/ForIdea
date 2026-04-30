@@ -11,14 +11,13 @@ import java.util.List;
 
 public class CartPage extends BasePage {
     private static final String REMOVE_BUTTON_PATTERN = "//div[text()='%s']//ancestor::div[@class='cart_item']//child::button";
-    private String page_url = "cart.html";
     private By product = By.cssSelector(".inventory_item_name");
     private By continueShoppingButton = By.id("continue-shopping");
     private By checkoutButton = By.id("checkout");
 
-
     public CartPage(WebDriver driver) {
         super(driver);
+        this.page_url = "cart.html";
     }
 
     @Step("Получить список продуктов в корзине")
@@ -46,10 +45,5 @@ public class CartPage extends BasePage {
     @Step("Кликнуть по кнопке Checkout")
     public void clickOnCheckoutButton() {
         driver.findElement(checkoutButton).click();
-    }
-
-    @Step("Получить ожидаемый Url")
-    public String getExpectedUrl() {
-        return BASE_URL + page_url;
     }
 }
