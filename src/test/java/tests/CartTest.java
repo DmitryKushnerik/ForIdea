@@ -1,98 +1,107 @@
 package tests;
 
 import io.qameta.allure.*;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import user.UserFactory;
 
-import static org.testng.Assert.assertEquals;
+import static enums.PageDetails.*;
 
 @Owner("Кушнерик Дмитрий")
-@Epic("Cтраница Your Cart")
+@Epic("Страница Your Cart")
 @TmsLink("ForIdea")
 @Issue("issues")
 public class CartTest extends BaseTest {
     String goodsName = "Sauce Labs Fleece Jacket";
 
-    @Step("Зайти на сайт под пользователем с админскими правами")
-    @BeforeMethod
-    public void openProductsPage() {
+    @Step("Открыть страницу корзина")
+    public void openCartPage(boolean product) {
         loginPage.open();
         loginPage.login(UserFactory.withAdminPermission());
+        if (product)
+            productsPage.addToCart(goodsName);
+        productsPage.navigationPanel.switchToCart();
+    }
+
+    @Feature("Работоспособность страницы корзины")
+    @Story("Переход на страницу корзины")
+    @Severity(SeverityLevel.BLOCKER)
+    @Test(description = "Проверка доступности страницы корзина", priority = 1)
+    void checkCartPageIsOpened() {
+        SoftAssert soft = new SoftAssert();
+        openCartPage(true);
+        soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
+        soft.assertTrue(cartPage.isTitleDisplayed(), NO_TITLE);
+        soft.assertEquals(cartPage.getTitle(), CART.getPageName(), WRONG_TITLE);
+        soft.assertAll();
     }
 
     @Feature("Список товаров в корзине")
     @Story("Добавление товара в корзину")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка наличия добавленного товара в корзине")
+    @Test(description = "Проверка наличия добавленного товара в корзине", priority = 2)
     public void checkGoodsInCart() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(productsPage.getCurrentUrl(), productsPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Products"));
-        soft.assertTrue(productsPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(productsPage.getTitle(), "Products", WRONG_TITLE);
-        productsPage.addToCart(goodsName);
-        productsPage.navigationPanel.switchToCart();
+        openCartPage(true);
         soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Your Cart"));
-        soft.assertTrue(cartPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(cartPage.getTitle(), "Your Cart", WRONG_TITLE);
-        soft.assertFalse(cartPage.getProductsNames().isEmpty(), "Cart is empty");
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
+        soft.assertFalse(cartPage.getProductsNames().isEmpty(), CART_IS_EMPTY);
         soft.assertEquals(cartPage.getProductsNames().size(), 1,
-                "The number of items in the cart does not match the expected quantity.");
+                WRONG_CART_QUANTITY);
         soft.assertTrue(cartPage.getProductsNames().contains(goodsName),
-                "The product list does not contain the expected name.");
+                NO_PRODUCT_IN_CART);
         soft.assertEquals(cartPage.navigationPanel.getCounterValue(), "1",
-                "The cart counter value does not match the expected value.");
-        soft.assertTrue(cartPage.navigationPanel.getCounterColor().contains(cartPage.navigationPanel.getExpectedCounterColor()),
-                "The BG color of cart counter does not match what is expected.");
+                WRONG_COUNTER_VALUE);
+        soft.assertEquals(cartPage.navigationPanel.getCounterBgColor(), cartPage.navigationPanel.getExpectedCounterBgColor(),
+                WRONG_BG_COLOR_PATTERN.formatted("Cart counter"));
         soft.assertAll();
     }
 
     @Feature("Список товаров в корзине")
     @Story("Удаление товара из корзины")
-    @Test(description = "Проверка удаления товара со страницы корзины")
+    @Test(description = "Проверка удаления товара со страницы корзины", priority = 3)
     @Severity(SeverityLevel.CRITICAL)
     public void checkRemoveGoodsFromCart() {
         SoftAssert soft = new SoftAssert();
-        soft.assertEquals(productsPage.getCurrentUrl(), productsPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Products"));
-        soft.assertTrue(productsPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(productsPage.getTitle(), "Products", WRONG_TITLE);
-        productsPage.addToCart(goodsName);
-        productsPage.navigationPanel.switchToCart();
+        openCartPage(true);
         soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Your Cart"));
-        soft.assertTrue(cartPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(cartPage.getTitle(), "Your Cart", WRONG_TITLE);
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
         soft.assertEquals(cartPage.navigationPanel.getCounterValue(), "1",
-                "The cart counter value does not match the expected value.");
+                WRONG_COUNTER_VALUE);
         cartPage.removeGoods(goodsName);
-        soft.assertTrue(cartPage.getProductsNames().isEmpty(), "Cart is not empty");
-        soft.assertFalse(cartPage.navigationPanel.isCounterExists(), "The cart counter is present.");
+        soft.assertTrue(cartPage.getProductsNames().isEmpty(), CART_IS_NOT_EMPTY);
+        soft.assertFalse(cartPage.navigationPanel.isCounterExists(), ELEMENT_IS_PRESENT_PATTERN.formatted("Cart counter"));
         soft.assertAll();
     }
 
     @Feature("Навигационные кнопки на странице корзины")
     @Story("Возвращение на страницу продуктов")
     @Severity(SeverityLevel.NORMAL)
-    @Test(description = "Проверка возвращения на страницу продуктов")
+    @Test(description = "Проверка возвращения на страницу продуктов", priority = 4)
     public void checkReturnToProductPage() {
-        productsPage.navigationPanel.switchToCart();
+        SoftAssert soft = new SoftAssert();
+        openCartPage(false);
+        soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
         cartPage.clickOnContinueButton();
-        assertEquals(productsPage.getCurrentUrl(), productsPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Products"));
+        soft.assertEquals(productsPage.getCurrentUrl(), productsPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(PRODUCTS.getPageName()));
+        soft.assertAll();
     }
 
     @Feature("Навигационные кнопки на странице корзины")
     @Story("Переход на страницу оформления заказа")
-    @Test(description = "Проверка перехода на страницу оформления заказа")
+    @Test(description = "Проверка перехода на страницу оформления заказа", priority = 5)
     @Severity(SeverityLevel.NORMAL)
     public void checkGotoCheckoutPage() {
-        productsPage.navigationPanel.switchToCart();
+        SoftAssert soft = new SoftAssert();
+        openCartPage(false);
+        soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
         cartPage.clickOnCheckoutButton();
-        assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Checkout: Your Information"));
+        soft.assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT1.getPageName()));
+        soft.assertAll();
     }
 }

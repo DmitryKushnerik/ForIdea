@@ -4,13 +4,15 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import static enums.PageDetails.PRODUCTS;
+
 public class ProductsPage extends BasePage {
     private static final String ADD_TO_CART_PATTERN = "//div[text()='%s']/ancestor::div[@class='inventory_item']//child::button";
-    private By addToCartBtn = By.xpath("//div[@class='inventory_item']//child::button");
+    private final By addToCartBtn = By.xpath("//div[@class='inventory_item']//child::button");
 
     public ProductsPage(WebDriver driver) {
         super(driver);
-        this.page_url = "inventory.html";
+        this.page_url = PRODUCTS.getPageUrl();
     }
 
     @Step("Получить количество товаров на странице")

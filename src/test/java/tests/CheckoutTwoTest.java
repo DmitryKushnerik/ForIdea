@@ -7,6 +7,7 @@ import user.UserFactory;
 
 import java.util.Locale;
 
+import static enums.PageDetails.*;
 import static org.testng.Assert.assertEquals;
 
 @Owner("Кушнерик Дмитрий")
@@ -35,26 +36,32 @@ public class CheckoutTwoTest extends BaseTest {
 
     @Feature("Работоспособность страницы оформления заказа")
     @Story("Переход на страницу оформления заказа")
-    @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка доступности страницы подтверждения заказа")
+    @Severity(SeverityLevel.BLOCKER)
+    @Test(description = "Проверка доступности страницы подтверждения заказа", priority = 1)
     void checkOutTwoPageIsOpened() {
         SoftAssert soft = new SoftAssert();
         openCheckoutTwoPage(true);
         soft.assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Checkout: Overview"));
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT2.getPageName()));
         soft.assertTrue(checkoutTwoPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(checkoutTwoPage.getTitle(), "Checkout: Overview", WRONG_TITLE);
+        soft.assertEquals(checkoutTwoPage.getTitle(), CHECKOUT2.getPageName(), WRONG_TITLE);
+        soft.assertTrue(checkoutTwoPage.isCancelButtonDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted(("Cancel Button")));
+        soft.assertTrue(checkoutTwoPage.isFinishButtonDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted(("Cancel Button")));
         soft.assertAll();
     }
 
     @Feature("Работоспособность страницы оформления заказа")
     @Story("Расчет стоимости товаров, налога и общей стоимости с налогом")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка корректности расчета стоимости товаров, налога и общей стоимости с налогом")
+    @Test(description = "Проверка корректности расчета стоимости товаров, налога и общей стоимости с налогом", priority = 2)
     void checkCorrectCalculations() {
         double sum;
         SoftAssert soft = new SoftAssert();
         openCheckoutTwoPage(true);
+        soft.assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT2.getPageName()));
         sum = checkoutTwoPage.calculateTotalCost();
         soft.assertTrue(checkoutTwoPage.getSubtotalCost().contains(String.format(Locale.US, "%.2f", sum)),
                 "Incorrect price without tax.");
@@ -68,30 +75,30 @@ public class CheckoutTwoTest extends BaseTest {
     @Feature("Навигационные кнопки на странице оформления заказа")
     @Story("Возвращение на страницу Продукты")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка доступности страницы подтверждения заказа")
+    @Test(description = "Проверка доступности страницы подтверждения заказа", priority = 3)
     void checkGotoProductsPage() {
         SoftAssert soft = new SoftAssert();
         openCheckoutTwoPage(false);
+        soft.assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT2.getPageName()));
         checkoutTwoPage.clickOnCancelButton();
         assertEquals(productsPage.getCurrentUrl(), productsPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Products"));
-        soft.assertTrue(productsPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(productsPage.getTitle(), "Products", WRONG_TITLE);
+                WRONG_PAGE_PATTERN.formatted(PRODUCTS.getPageName()));
         soft.assertAll();
     }
 
     @Feature("Навигационные кнопки на странице оформления заказа")
     @Story("Переход на страницу завершения заказа")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка перехода на страницу завершения заказа")
+    @Test(description = "Проверка перехода на страницу завершения заказа", priority = 4)
     void checkGotoCheckoutThreePage() {
         SoftAssert soft = new SoftAssert();
         openCheckoutTwoPage(false);
+        soft.assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT2.getPageName()));
         checkoutTwoPage.clickOnFinishButton();
         assertEquals(checkoutThreePage.getCurrentUrl(), checkoutThreePage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Checkout: Complete!"));
-        soft.assertTrue(checkoutThreePage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(checkoutThreePage.getTitle(), "Checkout: Complete!", WRONG_TITLE);
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT3.getPageName()));
         soft.assertAll();
     }
 }

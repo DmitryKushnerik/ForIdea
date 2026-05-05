@@ -7,16 +7,16 @@ import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 import user.UserFactory;
 
-import static org.testng.Assert.assertEquals;
+import static enums.PageDetails.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница Checkout: Your Information")
 @TmsLink("ForIdea")
 @Issue("issues")
 public class CheckoutOneTest extends BaseTest {
-    private String firstName = "Ivan";
-    private String lastName = "Ivanov";
-    private String postalCode = "658248";
+    private final String firstName = "Ivan";
+    private final String lastName = "Ivanov";
+    private final String postalCode = "658248";
 
     @Step("Открыть страницу оформления заказа")
     @BeforeMethod
@@ -29,44 +29,54 @@ public class CheckoutOneTest extends BaseTest {
 
     @Feature("Работоспособность страницы оформления заказа")
     @Story("Переход на страницу оформления заказа")
-    @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка доступности страницы оформления заказа")
+    @Severity(SeverityLevel.BLOCKER)
+    @Test(description = "Проверка доступности страницы оформления заказа", priority = 1)
     void checkCheckoutOnePageIsOpened() {
         SoftAssert soft = new SoftAssert();
         soft.assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Checkout: Your Information"));
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT1.getPageName()));
         soft.assertTrue(checkoutOnePage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(checkoutOnePage.getTitle(), "Checkout: Your Information",
+        soft.assertEquals(checkoutOnePage.getTitle(), CHECKOUT1.getPageName(),
                 WRONG_TITLE);
+        soft.assertTrue(checkoutOnePage.isFirstNameFieldDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted("First name field"));
+        soft.assertTrue(checkoutOnePage.isLastNameFieldDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted("Last name field"));
+        soft.assertTrue(checkoutOnePage.isPostalCodeFieldDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted("Zip/Postal code field"));
+        soft.assertTrue(checkoutOnePage.isCancelButtonDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted("Cancel button"));
+        soft.assertTrue(checkoutOnePage.isContinueButtonDisplayed(),
+                ELEMENT_IS_NOT_DISPLAYED_PATTERN.formatted("Continue button"));
         soft.assertAll();
     }
 
     @Feature("Навигационные кнопки на странице оформления заказа")
     @Story("Возвращение на страницу корзины")
     @Severity(SeverityLevel.NORMAL)
-    @Test(description = "Проверка возможности возвращения на страницу корзины при клике по кнопке Cancel")
+    @Test(description = "Проверка возвращения на страницу корзины при нажатии на кнопку Cancel", priority = 2)
     void checkGotoCartPage() {
         SoftAssert soft = new SoftAssert();
+        soft.assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT1.getPageName()));
         checkoutOnePage.clickOnCancelButton();
-        assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Your Cart"));
-        soft.assertTrue(cartPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(cartPage.getTitle(), "Your Cart", WRONG_TITLE);
+        soft.assertEquals(cartPage.getCurrentUrl(), cartPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CART.getPageName()));
         soft.assertAll();
     }
 
     @Feature("Навигационные кнопки на странице оформления заказа")
     @Story("Переход на страницу подтверждения заказа")
     @Severity(SeverityLevel.CRITICAL)
-    @Test(description = "Проверка перехода на страницу подтверждения заказа с корректным заполнением обязательных полей")
+    @Test(description = "Проверка перехода на страницу подтверждения заказа с корректным заполнением обязательных полей", priority = 3)
     public void checkCorrectData() {
         SoftAssert soft = new SoftAssert();
+        soft.assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT1.getPageName()));
         checkoutOnePage.fillCheckoutOneFields(firstName, lastName, postalCode);
         checkoutOnePage.clickOnContinueButton();
-        assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
-                WRONG_PAGE_PATTERN.formatted("Checkout: Overview"));
-        soft.assertTrue(checkoutTwoPage.isTitleDisplayed(), NO_TITLE);
-        soft.assertEquals(checkoutTwoPage.getTitle(), "Checkout: Overview", WRONG_TITLE);
+        soft.assertEquals(checkoutTwoPage.getCurrentUrl(), checkoutTwoPage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT2.getPageName()));
         soft.assertAll();
     }
 
@@ -74,13 +84,15 @@ public class CheckoutOneTest extends BaseTest {
     @Story("Переход на страницу подтверждения заказа")
     @Severity(SeverityLevel.CRITICAL)
     @Test(description = "Проверка перехода на страницу подтверждения заказа без заполнения обязательных полей",
-            dataProvider = "incorrectData")
+            dataProvider = "incorrectData", priority = 4)
     public void checkIncorrectData(String firstName, String lastName, String postalCode, String errorMsg) {
         SoftAssert soft = new SoftAssert();
+        soft.assertEquals(checkoutOnePage.getCurrentUrl(), checkoutOnePage.getExpectedUrl(),
+                WRONG_PAGE_PATTERN.formatted(CHECKOUT1.getPageName()));
         checkoutOnePage.fillCheckoutOneFields(firstName, lastName, postalCode);
         checkoutOnePage.clickOnContinueButton();
-        soft.assertTrue(checkoutOnePage.isErrorMessageDisplayed(), "The error message fails to appear");
-        soft.assertEquals(checkoutOnePage.getErrorMessageText(), errorMsg, "The error message text does not match what is expected.");
+        soft.assertTrue(checkoutOnePage.isErrorMessageDisplayed(), NO_ERROR_MESSAGE);
+        soft.assertEquals(checkoutOnePage.getErrorMessageText(), errorMsg, WRONG_ERROR_MESSAGE);
         soft.assertAll();
     }
 
