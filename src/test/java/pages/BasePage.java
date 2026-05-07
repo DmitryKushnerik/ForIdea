@@ -12,7 +12,7 @@ public class BasePage {
     public static final String BASE_URL = PropertyReader.getProperty("foridea.url");
     public static final String DATA_TEST_PATTERN = "[data-test=%s]";
     String page_url;
-    private By pageTitle = By.cssSelector(DATA_TEST_PATTERN.formatted("title"));
+    private final By pageTitle = By.cssSelector(DATA_TEST_PATTERN.formatted("title"));
     public NavigationPanel navigationPanel;
     WebDriver driver;
     public WebDriverWait wait;

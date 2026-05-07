@@ -2,6 +2,7 @@ package tests;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import io.qameta.allure.Step;
+import io.qameta.allure.testng.AllureTestNg;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,18 +10,15 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 import pages.*;
+import utils.TestListener;
 
 import java.time.Duration;
 
+@Listeners({AllureTestNg.class, TestListener.class})
 public class BaseTest {
-    final String WRONG_PAGE_PATTERN = "The '%s' page is not open";
-    final String NO_TITLE = "The page title is not displayed";
-    final String WRONG_TITLE = "The page title does not match what was expected.";
     public WebDriver driver;
     LoginPage loginPage;
     ProductsPage productsPage;
@@ -32,7 +30,7 @@ public class BaseTest {
     @Step("Открыть браузер")
     @Parameters({"browser"})
     @BeforeMethod
-    public void setup(@Optional("chrome") String browser) {
+    public void setup(@Optional("chrome") String browser, ITestContext context) {
         if (browser.equalsIgnoreCase("chrome")) {
             ChromeOptions options = new ChromeOptions();
             options.addArguments("start-maximized");
@@ -55,6 +53,7 @@ public class BaseTest {
         }
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
+        context.setAttribute("driver", driver);
         loginPage = new LoginPage(driver);
         productsPage = new ProductsPage(driver);
         cartPage = new CartPage(driver);

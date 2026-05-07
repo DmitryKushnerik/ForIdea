@@ -7,25 +7,27 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
+import static enums.PageDetails.CHECKOUT2;
+
 public class CheckoutTwoPage extends BasePage {
-    private By cancelButton = By.id("cancel");
-    private By finishButton = By.id("finish");
-    private By itemPrice = By.className("inventory_item_price");
-    private By subtotalLabel = By.className("summary_subtotal_label");
-    private By taxLabel = By.className("summary_tax_label");
-    private By totalLabel = By.className("summary_total_label");
+    private final By cancelButton = By.id("cancel");
+    private final By finishButton = By.id("finish");
+    private final By itemPrice = By.className("inventory_item_price");
+    private final By subtotalLabel = By.className("summary_subtotal_label");
+    private final By taxLabel = By.className("summary_tax_label");
+    private final By totalLabel = By.className("summary_total_label");
 
     public CheckoutTwoPage(WebDriver driver) {
         super(driver);
-        this.page_url = "checkout-step-two.html";
+        this.page_url = CHECKOUT2.getPageUrl();
     }
 
-    @Step("Кликнуть по кнопке Cancel")
+    @Step("Нажать на кнопку Cancel")
     public void clickOnCancelButton() {
         driver.findElement(cancelButton).click();
     }
 
-    @Step("Кликнуть по кнопке Finish")
+    @Step("Нажать на кнопку Finish")
     public void clickOnFinishButton() {
         driver.findElement(finishButton).click();
     }
@@ -35,7 +37,6 @@ public class CheckoutTwoPage extends BasePage {
         double sum = 0;
         List<WebElement> itemPrices = driver.findElements(itemPrice);
         for (WebElement price : itemPrices) {
-            //String rawstring =
             sum += Double.parseDouble(price.getText().replace("$", ""));
         }
         return sum;
@@ -54,5 +55,15 @@ public class CheckoutTwoPage extends BasePage {
     @Step("Получить расчитанную стоимость товаров без налога")
     public String getTotalCost() {
         return driver.findElement(totalLabel).getText();
+    }
+
+    @Step("Проверить, отображается ли кнопка Cancel")
+    public boolean isCancelButtonDisplayed() {
+        return driver.findElement(cancelButton).isDisplayed();
+    }
+
+    @Step("Проверить, отображается ли кнопка Finish")
+    public boolean isFinishButtonDisplayed() {
+        return driver.findElement(finishButton).isDisplayed();
     }
 }

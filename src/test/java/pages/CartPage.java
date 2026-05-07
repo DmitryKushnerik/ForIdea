@@ -9,15 +9,17 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import java.util.ArrayList;
 import java.util.List;
 
+import static enums.PageDetails.CART;
+
 public class CartPage extends BasePage {
     private static final String REMOVE_BUTTON_PATTERN = "//div[text()='%s']//ancestor::div[@class='cart_item']//child::button";
-    private By product = By.cssSelector(".inventory_item_name");
-    private By continueShoppingButton = By.id("continue-shopping");
-    private By checkoutButton = By.id("checkout");
+    private final By product = By.cssSelector(".inventory_item_name");
+    private final By continueShoppingButton = By.id("continue-shopping");
+    private final By checkoutButton = By.id("checkout");
 
     public CartPage(WebDriver driver) {
         super(driver);
-        this.page_url = "cart.html";
+        this.page_url = CART.getPageUrl();
     }
 
     @Step("Получить список продуктов в корзине")
@@ -37,12 +39,12 @@ public class CartPage extends BasePage {
         driver.findElement(button).click();
     }
 
-    @Step("Кликнуть по кнопке Continue Shopping")
+    @Step("Нажать на кнопку Continue Shopping")
     public void clickOnContinueButton() {
         driver.findElement(continueShoppingButton).click();
     }
 
-    @Step("Кликнуть по кнопке Checkout")
+    @Step("Нажать на кнопку Checkout")
     public void clickOnCheckoutButton() {
         driver.findElement(checkoutButton).click();
     }

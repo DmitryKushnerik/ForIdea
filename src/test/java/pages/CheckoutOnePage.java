@@ -4,25 +4,27 @@ import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import static enums.PageDetails.CHECKOUT1;
+
 public class CheckoutOnePage extends BasePage {
-    private By cancelButton = By.id("cancel");
-    private By continueButton = By.id("continue");
-    private By firstNameField = By.id("first-name");
-    private By lastNameField = By.id("last-name");
-    private By postalCodeField = By.id("postal-code");
-    private By errorMessage = By.cssSelector(DATA_TEST_PATTERN.formatted("error"));
+    private final By cancelButton = By.id("cancel");
+    private final By continueButton = By.id("continue");
+    private final By firstNameField = By.id("first-name");
+    private final By lastNameField = By.id("last-name");
+    private final By postalCodeField = By.id("postal-code");
+    private final By errorMessage = By.cssSelector(DATA_TEST_PATTERN.formatted("error"));
 
     public CheckoutOnePage(WebDriver driver) {
         super(driver);
-        this.page_url = "checkout-step-one.html";
+        this.page_url = CHECKOUT1.getPageUrl();
     }
 
-    @Step("Кликнуть по кнопке Cancel")
+    @Step("Нажать на кнопку Cancel")
     public void clickOnCancelButton() {
         driver.findElement(cancelButton).click();
     }
 
-    @Step("Кликнуть по кнопке Continue")
+    @Step("Нажать на кнопку Continue")
     public void clickOnContinueButton() {
         driver.findElement(continueButton).click();
     }
@@ -42,5 +44,30 @@ public class CheckoutOnePage extends BasePage {
     @Step("Получить текст сообщения об ошибке")
     public String getErrorMessageText() {
         return driver.findElement(errorMessage).getText();
+    }
+
+    @Step("Проверить, отображается ли поле ввода First Name")
+    public boolean isFirstNameFieldDisplayed() {
+        return driver.findElement(firstNameField).isDisplayed();
+    }
+
+    @Step("Проверить, отображается ли поле ввода Last Name")
+    public boolean isLastNameFieldDisplayed() {
+        return driver.findElement(lastNameField).isDisplayed();
+    }
+
+    @Step("Проверить, отображается ли поле ввода Zip/Postal code")
+    public boolean isPostalCodeFieldDisplayed() {
+        return driver.findElement(postalCodeField).isDisplayed();
+    }
+
+    @Step("Проверить, отображается ли кнопка Cancel")
+    public boolean isCancelButtonDisplayed() {
+        return driver.findElement(cancelButton).isDisplayed();
+    }
+
+    @Step("Проверить, отображается ли кнопка Continue")
+    public boolean isContinueButtonDisplayed() {
+        return driver.findElement(continueButton).isDisplayed();
     }
 }

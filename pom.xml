@@ -18,6 +18,7 @@
         <aspectjweaver.version>1.9.25.1</aspectjweaver.version>
         <allure-maven.version>2.10.0</allure-maven.version>
         <allure-testng.version>2.29.1</allure-testng.version>
+        <lombok.version>1.18.44</lombok.version>
     </properties>
 
     <dependencies>
@@ -46,6 +47,11 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure-testng.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -65,6 +71,20 @@
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>${allure-maven.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.7.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
             </plugin>
         </plugins>
     </build>
