@@ -9,6 +9,7 @@ import user.UserFactory;
 import java.util.List;
 
 import static enums.PageDetails.PRODUCTS;
+import static testdata.Messages.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница Продукты")

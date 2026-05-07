@@ -9,6 +9,7 @@ import user.UserFactory;
 import static enums.PageDetails.CHECKOUT3;
 import static enums.PageDetails.PRODUCTS;
 import static org.testng.Assert.assertEquals;
+import static testdata.Messages.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница Checkout: Complete!")

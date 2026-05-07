@@ -9,6 +9,7 @@ import java.util.Locale;
 
 import static enums.PageDetails.*;
 import static org.testng.Assert.assertEquals;
+import static testdata.Messages.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница Checkout: Overview")

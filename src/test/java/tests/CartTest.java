@@ -6,6 +6,7 @@ import org.testng.asserts.SoftAssert;
 import user.UserFactory;
 
 import static enums.PageDetails.*;
+import static testdata.Messages.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница Your Cart")

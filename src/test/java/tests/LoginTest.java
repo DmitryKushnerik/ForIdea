@@ -10,6 +10,7 @@ import user.UserFactory;
 import static enums.PageDetails.CART;
 import static enums.PageDetails.PRODUCTS;
 import static org.testng.Assert.assertEquals;
+import static testdata.Messages.*;
 
 @Owner("Кушнерик Дмитрий")
 @Epic("Страница входа в систему")
